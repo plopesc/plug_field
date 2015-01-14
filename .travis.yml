@@ -67,7 +67,7 @@ script:
   # go to our Drupal main directory
   - cd $TRAVIS_BUILD_DIR/../drupal
   - ls -la $TRAVIS_BUILD_DIR/../drupal/sites/default
-  # Download and enable module dependencies
+  # Download and enable module dependencies.
   - drush --yes dl xautoload
   - drush --yes dl plug
   - drush --yes dl composer_manager
