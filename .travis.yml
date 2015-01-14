@@ -71,7 +71,6 @@ script:
   - drush --yes dl xautoload
   - drush --yes dl plug
   - drush --yes dl composer_manager
-  - drush --yes pm-enable plug
   - drush --yes pm-enable plug_field_example
   - drush composer update
   # Add the required patch in https://www.drupal.org/node/2403317.
