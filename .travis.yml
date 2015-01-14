@@ -67,16 +67,17 @@ script:
   # go to our Drupal main directory
   - cd $TRAVIS_BUILD_DIR/../drupal
   - ls -la $TRAVIS_BUILD_DIR/../drupal/sites/default
-  # Download module and its dependencies
+  # Download and enable module dependencies
   - drush --yes dl xautoload
   - drush --yes dl plug
   - drush --yes dl composer_manager
+  - drush --yes pm-enable plug
+  - drush composer update
   # Add the required patch in https://www.drupal.org/node/2403317.
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
   - patch -p1 < composer_manager_autoloader.patch
-  # Enable the modules.
+  # Enable the Plug Field modules.
   - drush --yes pm-enable plug_field plug_field_example
-  - drush composer update
   # Run the tests
   - drush test-run "Plug Field" --uri=http://localhost
