@@ -79,6 +79,6 @@ script:
   - patch -p1 < composer_manager_autoloader.patch
   # Enable the Plug Field modules.
   - cd $TRAVIS_BUILD_DIR/../drupal
-  - drush --yes pm-enable plug_field plug_field_example
+  - drush --yes pm-enable plug_field_example
   # Run the tests
   - drush test-run "Plug Field" --uri=http://localhost
