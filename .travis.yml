@@ -1,0 +1,82 @@
+language: php
+
+cache:
+  apt: true
+  bundler: true
+  directories:
+    - $HOME/tmp/drush
+    - $HOME/.bundle
+    - $TRAVIS_BUILD_DIR/../drupal/sites/all/libraries/composer
+    - $HOME/.composer/cache
+
+php:
+  - 5.4
+
+env:
+  - PATH=$PATH:/home/travis/.composer/vendor/bin
+
+# This will create the database
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+install:
+  # Grab Drush
+  - pear channel-discover pear.drush.org
+  - pear install drush/drush-5.8.0
+  - phpenv rehash
+  # Make sure we don't fail when checking out projects
+  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  # LAMP package installation (mysql is already started)
+  - sudo apt-get update
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  # enable php-fpm, travis does not support any other method with php and apache
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  # Make sure the apache root is in our wanted directory
+  - echo "$(curl -fsSL https://gist.githubusercontent.com/nickveenhof/11386315/raw/b8abaf9304fe12b5cc7752d39c29c1edae8ac2e6/gistfile1.txt)" | sed -e "s,PATH,$TRAVIS_BUILD_DIR/../drupal,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
+  # Set sendmail so drush doesn't throw an error during site install.
+  - echo "sendmail_path='true'" >> `php --ini | grep "Loaded Configuration" | awk '{print $4}'`
+  # Forward the errors to the syslog so we can print them
+  - echo "error_log=syslog" >> `php --ini | grep "Loaded Configuration" | awk '{print $4}'`
+  # Get latest drupal 8 core
+  - cd $TRAVIS_BUILD_DIR/..
+  - git clone --depth 1 --branch 7.x http://git.drupal.org/project/drupal.git
+  # Restart apache and test it
+  - sudo service apache2 restart
+  - curl -v "http://localhost"
+  # Re-enable when trying to get CodeSniffer doesn't return a 403 anymore.
+  #- composer global require drupal/coder:\>7
+
+before_script:
+  - cd $TRAVIS_BUILD_DIR/../drupal
+  # Update drupal core
+  - git pull origin 7.x
+  # Install the site
+  - drush -v site-install minimal --db-url=mysql://root:@localhost/drupal --yes
+  - drush en --yes simpletest
+  - phpenv rehash
+
+script:
+  # go to our Drupal module directory
+  - mkdir $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/plug_field
+  - cp -R $TRAVIS_BUILD_DIR/* $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/plug_field/
+  # go to our Drupal main directory
+  - cd $TRAVIS_BUILD_DIR/../drupal
+  - ls -la $TRAVIS_BUILD_DIR/../drupal/sites/default
+  # Download module and its dependencies
+  - drush --yes dl xautoload
+  - drush --yes dl plug
+  - drush --yes dl composer_manager
+  # Add the required patch in https://www.drupal.org/node/2403317.
+  - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
+  - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
+  - patch -p1 < composer_manager_autoloader.patch
+  # Enable the modules.
+  - drush --yes pm-enable plug_field plug_field_example
+  - drush composer update
+  # Run the tests
+  - drush test-run "Plug Field" --uri=http://localhost
