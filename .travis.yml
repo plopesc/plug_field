@@ -72,7 +72,7 @@ script:
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
   - patch -p1 < composer_manager_autoloader.patch
-  - sudo service php5-fpm reload
+  - sudo service php-fpm reload
   - sudo service apache2 restart
   #- drush cc all
   #- drush field-info types
