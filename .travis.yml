@@ -80,5 +80,4 @@ script:
   #- drush test-run "Plug" --uri=http://localhost
   #- drush test-run "Plug Field" --uri=http://localhost
   - drush vset composer_manager_autoloader_bootstrap 0 -y
-  - echo "asdf" >> composer_manager.module
   - drush cc all

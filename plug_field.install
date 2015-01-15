@@ -18,5 +18,6 @@ function plug_field_enable() {
  * Implements hook_field_schema().
  */
 function plug_field_field_schema($field) {
+  composer_manager_register_autoloader();
   return PlugFieldTypeManager::get()->createInstance($field['type'])->schema($field);
 }
