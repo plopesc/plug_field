@@ -82,5 +82,7 @@ script:
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
   - patch -p1 < composer_manager_autoloader.patch
+  - drush cc all
+  - drush field-info
   # Run the tests
   - drush test-run "Plug Field" --uri=http://localhost
