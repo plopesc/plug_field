@@ -86,6 +86,6 @@ script:
   # Run the tests
   #- drush test-run "Plug" --uri=http://localhost
   #- drush test-run "Plug Field" --uri=http://localhost
-  - cat composer_manager.module
-  - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/libraries
+  - drush vset composer_manager_autoloader_bootstrap 0 -y
+  - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/libraries/composer
   - ls -la
