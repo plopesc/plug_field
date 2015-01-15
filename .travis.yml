@@ -80,6 +80,5 @@ script:
   #- drush test-run "Plug" --uri=http://localhost
   #- drush test-run "Plug Field" --uri=http://localhost
   - drush vset composer_manager_autoloader_bootstrap 0 -y
-  - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/libraries/composer/drupal/d7-plugin/lib/Drupal/Component/Plugin
-  - ls -la
+  - echo "asdf" >> composer_manager.module
   - drush cc all
