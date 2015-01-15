@@ -75,7 +75,6 @@ script:
   - drush --yes dl composer_manager
   - drush --yes pm-enable plug
   - drush --yes pm-enable plug_field_example
-  - drush --yes composer-manager update
   # Add the required patch in https://www.drupal.org/node/2403317.
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
