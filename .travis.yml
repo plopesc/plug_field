@@ -69,7 +69,6 @@ script:
   - cp -R $TRAVIS_BUILD_DIR/* $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/plug_field/
   # go to our Drupal main directory
   - cd $TRAVIS_BUILD_DIR/../drupal
-  - ls -la $TRAVIS_BUILD_DIR/../drupal/sites/default
   # Download and enable modules.
   - drush --yes dl xautoload
   - drush --yes dl composer-8.x-1.x
@@ -83,6 +82,6 @@ script:
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
   - patch -p1 < composer_manager_autoloader.patch
   - drush cc all
-  - drush field-info
+  - drush field-info types
   # Run the tests
   - drush test-run "Plug Field" --uri=http://localhost
