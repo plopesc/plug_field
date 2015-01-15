@@ -59,6 +59,7 @@ before_script:
   - drush -v site-install minimal --db-url=mysql://root:@localhost/drupal --yes
   - drush en --yes simpletest
   - phpenv rehash
+  - drush vset composer_manager_autobuild_packages 0 -y
   #- echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
   #- sudo service mysql restart
 
@@ -72,11 +73,6 @@ script:
   # Download and enable modules.
   - drush --yes dl xautoload
   - drush --yes dl composer_manager
-  - drush
-  - drush --yes pm-enable composer_manager
-  - drush
-  - drush cc drush
-  - drush
   - drush --yes dl plug
   - drush --yes pm-enable plug
   - drush composer-manager update --no-interaction
