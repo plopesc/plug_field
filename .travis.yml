@@ -1,14 +1,5 @@
 language: php
 
-cache:
-  apt: true
-  bundler: true
-  directories:
-    - $HOME/tmp/drush
-    - $HOME/.bundle
-    - $TRAVIS_BUILD_DIR/../drupal/sites/all/libraries/composer
-    - $HOME/.composer/cache
-
 php:
   - 5.4
 
@@ -81,6 +72,8 @@ script:
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
   - patch -p1 < composer_manager_autoloader.patch
+  - sudo service php5-fpm reload
+  - sudo service apache2 restart
   #- drush cc all
   #- drush field-info types
   # Run the tests
