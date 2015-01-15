@@ -72,6 +72,7 @@ script:
   - ls -la $TRAVIS_BUILD_DIR/../drupal/sites/default
   # Download and enable modules.
   - drush --yes dl xautoload
+  - drush --yes dl composer-8.x-1.x
   - drush --yes dl composer_manager
   - drush --yes dl plug
   - drush --yes pm-enable plug
