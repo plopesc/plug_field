@@ -81,8 +81,11 @@ script:
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
   - patch -p1 < composer_manager_autoloader.patch
-  - drush cc all
-  - drush field-info types
+  #- drush cc all
+  #- drush field-info types
   # Run the tests
-  - drush test-run "Plug" --uri=http://localhost
-  - drush test-run "Plug Field" --uri=http://localhost
+  #- drush test-run "Plug" --uri=http://localhost
+  #- drush test-run "Plug Field" --uri=http://localhost
+  - cat composer_manager.module
+  - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/libraries
+  - ls -la
