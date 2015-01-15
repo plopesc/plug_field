@@ -59,8 +59,8 @@ before_script:
   - drush -v site-install minimal --db-url=mysql://root:@localhost/drupal --yes
   - drush en --yes simpletest
   - phpenv rehash
-  - echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
-  - sudo service mysql restart
+  #- echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
+  #- sudo service mysql restart
 
 script:
   # go to our Drupal module directory
