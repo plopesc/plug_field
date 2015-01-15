@@ -72,8 +72,11 @@ script:
   # Download and enable modules.
   - drush --yes dl xautoload
   - drush --yes dl composer_manager
+  - drush
   - drush --yes pm-enable composer_manager
+  - drush
   - drush cc drush
+  - drush
   - drush --yes dl plug
   - drush --yes pm-enable plug
   - drush composer-manager update --no-interaction
