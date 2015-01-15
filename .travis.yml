@@ -84,4 +84,5 @@ script:
   - drush cc all
   - drush field-info types
   # Run the tests
+  - drush test-run "Plug" --uri=http://localhost
   - drush test-run "Plug Field" --uri=http://localhost
