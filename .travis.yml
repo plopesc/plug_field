@@ -89,3 +89,4 @@ script:
   - drush vset composer_manager_autoloader_bootstrap 0 -y
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/libraries/composer
   - ls -la
+  - drush cc all
