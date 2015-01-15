@@ -72,9 +72,10 @@ script:
   # Download and enable modules.
   - drush --yes dl xautoload
   - drush --yes pm-enable composer_manager
-  - drush composer-manager update --no-interation
+  - drush composer-manager update --no-interaction
   - drush --yes dl plug
   - drush --yes pm-enable plug
+  - drush composer-manager update --no-interaction
   - drush --yes pm-enable plug_field_example
   # Add the required patch in https://www.drupal.org/node/2403317.
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
