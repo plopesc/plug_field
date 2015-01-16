@@ -39,8 +39,7 @@ install:
   # Restart apache and test it
   - sudo service apache2 restart
   - curl -v "http://localhost"
-  # Re-enable when trying to get CodeSniffer doesn't return a 403 anymore.
-  #- composer global require drupal/coder:\>7
+
 
 before_script:
   - cd $TRAVIS_BUILD_DIR/../drupal
@@ -50,21 +49,23 @@ before_script:
   - drush -v site-install minimal --db-url=mysql://root:@localhost/drupal --yes
   - drush en --yes simpletest
   - phpenv rehash
+  # Set variable to 0 to avoid automatic composer build
   - drush vset composer_manager_autobuild_packages 0 -y
+  # Increse nmax_allowed_packet to avoid MySQL errors
   - echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
   - sudo service mysql restart
 
 script:
-  # go to our Drupal module directory
+  # Go to our Drupal module directory
   - mkdir $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/plug_field
   - cp -R $TRAVIS_BUILD_DIR/* $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/plug_field/
-  # go to our Drupal main directory
+  # Go to our Drupal main directory
   - cd $TRAVIS_BUILD_DIR/../drupal
-  # Download and enable modules.
+  # Download and enable modules
   - drush --yes dl xautoload
   - drush --yes dl composer-8.x-1.x
   - drush --yes dl composer_manager
-  # Add the required patch in https://www.drupal.org/node/2403317.
+  # Add the required patch in https://www.drupal.org/node/2403317
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
   - patch -p1 < composer_manager_autoloader.patch
@@ -72,5 +73,5 @@ script:
   - drush --yes pm-enable plug
   - drush --yes composer-manager update --no-interaction --prefer-source
   - drush --yes pm-enable plug_field_example
+  # Run module tests
   - drush test-run "Plug Field" --uri=http://localhost
-  - drush field-info types
