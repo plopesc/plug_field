@@ -82,3 +82,4 @@ script:
   - drush vset composer_manager_autoloader_bootstrap 0 -y
   - echo "function composer_manager_boot(){die();echo 'hola2';}" >> composer_manager.module
   - drush cc all
+  - drush field-info types
