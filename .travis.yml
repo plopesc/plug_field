@@ -51,8 +51,8 @@ before_script:
   - drush en --yes simpletest
   - phpenv rehash
   - drush vset composer_manager_autobuild_packages 0 -y
-  #- echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
-  #- sudo service mysql restart
+  - echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
+  - sudo service mysql restart
 
 script:
   # go to our Drupal module directory
@@ -67,22 +67,10 @@ script:
   # Add the required patch in https://www.drupal.org/node/2403317.
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
   - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
+  - patch -p1 < composer_manager_autoloader.patch
   - drush --yes dl plug
   - drush --yes pm-enable plug
   - drush --yes composer-manager update --no-interaction --prefer-source
   - drush --yes pm-enable plug_field_example
-  # Add the required patch in https://www.drupal.org/node/2403317.
-  #- cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
-  #- wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
-  #- patch -p1 < composer_manager_autoloader.patch
-  #- sudo service php-fpm reload
-  #- sudo service apache2 restart
-  #- drush cc all
-  #- drush field-info types
-  # Run the tests
-  #- drush test-run "Plug" --uri=http://localhost
   - drush test-run "Plug Field" --uri=http://localhost
-  #- drush vset composer_manager_autoloader_bootstrap 0 -y
-  #- echo "function composer_manager_boot(){die();echo 'hola2';}" >> composer_manager.module
-  #- drush cc all
-  #- drush field-info types
+  - drush field-info types
