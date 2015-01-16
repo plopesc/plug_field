@@ -13,7 +13,6 @@ use \Drupal\plug_field\PlugFieldTypeManager;
  * Ensures that modules providing field plugins in use can't be disabled.
  */
 function plug_field_system_info_alter(&$info, $file, $type) {
-  composer_manager_register_autoloader();
   $definitions = PlugFieldTypeManager::get()->getDefinitions();
 
   foreach ($definitions as $definition) {
@@ -101,7 +100,6 @@ function plug_field_requirements($phase) {
  * Implements hook_field_info().
  */
 function plug_field_field_info() {
-  composer_manager_register_autoloader();
   return PlugFieldTypeManager::get()->getDefinitions();
 }
 
@@ -109,7 +107,6 @@ function plug_field_field_info() {
  * Implements hook_field_load().
  */
 function plug_field_field_load($entity_type, $entities, $field, $instances, $langcode, &$items, $age) {
-  composer_manager_register_autoloader();
   if ($plugin = PlugFieldTypeManager::get()->createInstance($field['type'])) {
     $plugin->load($entity_type, $entities, $field, $instances, $langcode, $items, $age);
   }
