@@ -70,8 +70,8 @@ script:
   - drush --yes pm-enable plug_field_example
   # Add the required patch in https://www.drupal.org/node/2403317.
   - cd $TRAVIS_BUILD_DIR/../drupal/sites/all/modules/composer_manager
-  #- wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
-  #- patch -p1 < composer_manager_autoloader.patch
+  - wget https://www.drupal.org/files/issues/composer_manager_autoloader.patch
+  - patch -p1 < composer_manager_autoloader.patch
   #- sudo service php-fpm reload
   #- sudo service apache2 restart
   #- drush cc all
@@ -80,6 +80,6 @@ script:
   #- drush test-run "Plug" --uri=http://localhost
   #- drush test-run "Plug Field" --uri=http://localhost
   - drush vset composer_manager_autoloader_bootstrap 0 -y
-  - echo "function composer_manager_boot(){die();echo 'hola2';}" >> composer_manager.module
+  #- echo "function composer_manager_boot(){die();echo 'hola2';}" >> composer_manager.module
   - drush cc all
   - drush field-info types
